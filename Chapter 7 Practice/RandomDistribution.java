@@ -10,20 +10,19 @@ public class RandomDistribution
         int maxValue = in.nextInt();
         
         int[] values = new int[maxValue];
-        for (int i=0; i<numberRandoms; i++)
+        for (int i = 0; i < numberRandoms; i++)
         {
             int value = (int)Math.random()*maxValue;
-            for (int j=0; j<values.length; j++)
+            for (int j = 0; j < values.length; j++)
             {
-                if (value==j)
+                if (value == j)
                   {
                       values[j]++;
                       System.out.println(values[j]);
                   }              
-            } 
-            
+            }           
         }
-        for (int k=0; k<values.length;k++)
+        for (int k = 0; k < values.length; k++)
         {
             System.out.println(k+": "+values[k]);
         }
