@@ -1,4 +1,4 @@
-
+ 
 /**
  * The model for radar scan and accumulator
  * 
@@ -23,7 +23,9 @@ public class Radar
     
     // number of scans of the radar since construction
     private int numScans;
-
+    
+    private int dX;
+    private int dY;
     /**
      * Constructor for objects of class Radar
      * 
@@ -49,7 +51,7 @@ public class Radar
      * Performs a scan of the radar. Noise is injected into the grid and the accumulator is updated.
      * 
      */
-    public void scan()
+    public void scan(int dX, int dY)
     {
         // zero the current scan grid
         for(int row = 0; row < currentScan.length; row++)
