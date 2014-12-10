@@ -29,17 +29,27 @@ public class Array2D
     public String getRow( int row )
     {
        String str = "";
-        for ( int row = 0; row < table.length; row++)
+        for ( int val: table[row] )
        {
-          str += table[row];
+          str += val + "/t";
        }
        return str;
+    }
+    public String getCol( int col )
+    {
+        String str = "";
+        
+        for ( int row = 0; row < table.length; row++ )
+        {
+            str += table[row][col] + "/t";
+        }
+        return str;
     }
 
     public static void main(String[] args)
     {
         Array2D table= new Array2D();
-        System.out.println( table.toString());
-        System.out.println( table.getRow());
+        
+        
     }
 }
