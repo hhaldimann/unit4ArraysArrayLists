@@ -1,5 +1,5 @@
 import javax.swing.JFrame;
-
+import java.util.Scanner;
 /**
  * Class that contains the main method for the program and creates the frame containing the component.
  * 
@@ -19,7 +19,13 @@ public class RadarViewer
         final int COLS = 100;
         Radar radar = new Radar(ROWS, COLS);
         radar.setNoiseFraction(0.10);
-        radar.scan(int dX, int dY);
+        
+        int row; //row
+        int col; //col
+        int dx;  //dx
+        int dy;	//dy						
+        
+        radar.scan();
         
         JFrame frame = new JFrame();
         
@@ -32,21 +38,52 @@ public class RadarViewer
         
         // set the size of the frame to encompass the contained component
         frame.pack();
-        
+       
+        // code added to request monster position and dx/dy values.
+        Scanner scan = new Scanner(System.in);
+        System.out.print("Please enter the row of the Monster location(10 to 90): ");
+        row = scan.nextInt();
+        if ( row < 10 || row > 90)
+        {
+            System.exit(0);
+        }
+        System.out.print("Please enter the column of the Monster location(10 to 90): ");
+        col = scan.nextInt();
+        if ( col < 10 || col > 90)
+        {
+            System.exit(0);
+        }
+        System.out.println("\nThe Monster will be located at (" + row + "," + col + ")");
+        System.out.print("\nPlease enter the dx value (from -5 to 5): ");
+        dx = scan.nextInt();
+        if ( dx < -5 || dx > 5 )
+        {
+            System.exit(0);
+        }
+        System.out.print("\nPlease enter the dx value (from -5 to 5): ");
+        dy = scan.nextInt();
+        if ( dy < -5 || dy > 5 )
+        {
+            System.exit(0);
+        }
+        System.out.println("The dx/dy values are: " + dx + "/" + dy + 
+        			". \n\nPress any key to begin the display?");
+        radar.setMonsterLocation(row, col);
+        	radar.setdx(dx);
+        	radar.setdy(dy);
         // make the frame visible which will result in the paintComponent method being invoked on the
         //  component.
         frame.setVisible(true);
-        
+                     
         // perform 100 scans of the radar wiht a slight pause between each
         // after each scan, instruct the Java Run-Time to redraw the window
         for(int i = 0; i < 100; i++)
         {
             Thread.sleep(100); // sleep 100 milliseconds (1/10 second)
             
-            radar.scan(dX*i,dY*i);
+            radar.scan();
             
             frame.repaint();
         }
     }
-
 }

@@ -1,4 +1,3 @@
- 
 /**
  * The model for radar scan and accumulator
  * 
@@ -24,9 +23,11 @@ public class Radar
     // number of scans of the radar since construction
     private int numScans;
     
-    private int dX;
-    private int dY;
-    /**
+    private int dx;                     // dx value for x value of grid
+    private int dy;                     // dy value for y value of grid
+    private int newLocationRow;         // new location calculated from dx/dy
+    private int newLocationCol;         // rows and columns
+     /**
      * Constructor for objects of class Radar
      * 
      * @param   rows    the number of rows in the radar grid
@@ -45,41 +46,40 @@ public class Radar
         
         noiseFraction = 0.05;
         numScans= 0;
+        
+        newLocationRow = monsterLocationRow;            // start with the monster location  Hunter H
+        newLocationCol = monsterLocationCol;            // include both row and column
+        
     }
     
     /**
      * Performs a scan of the radar. Noise is injected into the grid and the accumulator is updated.
      * 
      */
-    public void scan(int dX, int dY)
+    public void scan()
+    
     {
-        // zero the current scan grid
-        for(int row = 0; row < currentScan.length; row++)
+       for(int row = 0; row < currentScan.length; row++)
         {
             for(int col = 0; col < currentScan[0].length; col++)
             {
                 currentScan[row][col] = false;
             }
         }
-        
-        // detect the monster
-        currentScan[monsterLocationRow][monsterLocationCol] = true;
-        
-        // inject noise into the grid
         injectNoise();
-        
-        // udpate the accumulator
-        for(int row = 0; row < currentScan.length; row++)
+        // update the accumulator
+       for(int row = 0; row < currentScan.length; row++)
         {
             for(int col = 0; col < currentScan[0].length; col++)
             {
-                if(currentScan[row][col] == true)
-                {
-                   accumulator[row][col]++;
-                }
+                    accumulator[row][col] = 0;
             }
         }
-        
+       accumulator[newLocationRow][newLocationCol] = numScans;      // indicate the location of the
+                                                                    // monster
+       
+       getNewLocation();                                // goes and calculates the next location
+       
         // keep track of the total number of scans
         numScans++;
     }
@@ -96,6 +96,9 @@ public class Radar
         // remember the row and col of the monster's location
         monsterLocationRow = row;
         monsterLocationCol = col;
+        
+        newLocationRow = row;
+        newLocationCol = col;       
         
         // update the radar grid to show that something was detected at the specified location
         currentScan[row][col] = true;
@@ -186,5 +189,98 @@ public class Radar
             }
         }
     }
+  
+    /**
+     * set the dx value in the object
+     * 
+     * @param dx  the x increment in the dx/dy pair. Note the number can be negative
+     */
     
+    
+    public void setdx(int dx) {
+        this.dx = dx;
+    }
+    
+    /**
+     * Set the dy value in the object
+     * 
+     * @param dy  the y increment in the dx/dy pair.  Note the number can be negative.
+     */
+    
+    public void setdy(int dy) {
+        this.dy = dy;
+    }
+    
+    /**
+     * get the new location of the monster in the display by providing new X,Y values.
+     */
+    
+    private void getNewLocation() {
+        if ((newLocationRow + dx) >= currentScan.length) 
+        {
+            findNewLocation();                              
+            return;                                     
+        } 
+        else if ((newLocationRow + dx) <= 0) 
+        {       
+                findNewLocation();                          
+                return;
+        }
+
+        else 
+        {
+                newLocationRow += dx;       
+        }
+        if ((newLocationCol + dy) >= currentScan[0].length) 
+        {   
+            findNewLocation();                              
+            return;
+        } 
+        else if ((newLocationCol + dy) <= 0) 
+        {               
+                findNewLocation();                          
+                return;
+        }
+
+        else 
+        {
+                newLocationCol += dy;                       
+        } 
+        return;
+    }
+    
+    /**
+    * Find a new location if     the current new X or Y is outside of the panel
+    */
+    
+    private void findNewLocation() {
+
+        int row = monsterLocationRow;           
+        int col = monsterLocationCol;
+
+        int dxVal = -dx;                            // reverse the dx/dy values
+        int dyVal = -dy;
+
+        // start at the current monster location and move back to the location on
+        // the panel where the grid enters the panel
+
+        while (true) 
+        {                               
+            if (((row + dxVal) < currentScan.length) &&     // see if we're off the panel
+                    ((row + dxVal) > 0) &&
+                    ((col + dyVal) < currentScan[0].length) &&
+                    ((col + dyVal) > 0)) {
+                row += dxVal;                       
+                col += dyVal;
+                continue;                           
+
+            }
+            else 
+            {
+                newLocationRow = row;               // we've hit the border, use the last
+                newLocationCol = col;               // good X,Y coordinates.
+                break;
+            }
+        }
+    }   
 }
