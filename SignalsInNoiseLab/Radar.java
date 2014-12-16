@@ -215,7 +215,7 @@ public class Radar
      * get the new location of the monster in the display by providing new X,Y values.
      */
     
-    private void getNewLocation() {
+    public void getNewLocation() {
         if ((newLocationRow + dx) >= currentScan.length) 
         {
             findNewLocation();                              
@@ -253,7 +253,7 @@ public class Radar
     * Find a new location if     the current new X or Y is outside of the panel
     */
     
-    private void findNewLocation() {
+    public void findNewLocation() {
 
         int row = monsterLocationRow;           
         int col = monsterLocationCol;
